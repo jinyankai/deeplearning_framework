@@ -455,6 +455,19 @@ TransformerDecoder(
   (dense): Linear(in_features=24, out_features=200, bias=True)
 )
 """
+class EncoderDecoder(nn.Module):
+    """The base class for the encoder-decoder architecture.
+
+    Defined in :numref:`sec_encoder-decoder`"""
+    def __init__(self, encoder, decoder, **kwargs):
+        super(EncoderDecoder, self).__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+
+    def forward(self, enc_X, dec_X, *args):
+        enc_outputs = self.encoder(enc_X, *args)
+        dec_state = self.decoder.init_state(enc_outputs, *args)
+        return self.decoder(dec_X, dec_state)
 
 # 训练
 # 英语－法语”机器翻译数据集上训练Transformer模型
